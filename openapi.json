@@ -1,0 +1,1185 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Dynamics 365 Business Central",
+    "description" : "WSA API's to integrate with TCM",
+    "version" : "0.0.1"
+  },
+  "servers" : [ {
+    "url" : "https://api.businesscentral.dynamics.com/v2.0/{tenantId}/{instanceName}/api/wsa/tcm/beta",
+    "description" : "AT/CH test instance",
+    "variables" : {
+      "tenantId" : {
+        "description" : "AAD tenant ID",
+        "default" : "9865398f-6bb9-4f95-b2b8-84f34fd73d6f"
+      },
+      "instanceName" : {
+        "description" : "BC instance name",
+        "default" : "ch-sandbox"
+      }
+    }
+  } ],
+  "paths" : {
+    "/companies({company_id})/patients" : {
+      "post" : {
+        "tags" : [ "patient" ],
+        "summary" : "Creates a new patient",
+        "description" : "New patients should be sent to Business Central only when a related financial transaction is triggered.  Patients with no financial transactions should remain in TCM only.",
+        "operationId" : "postPatient",
+        "parameters" : [ {
+          "name" : "company_id",
+          "in" : "path",
+          "description" : "id for company",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "application/json",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "A new patient has been successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/patient"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies({company_id})/patients({patient_id})" : {
+      "patch" : {
+        "tags" : [ "patient" ],
+        "summary" : "Updates patient",
+        "description" : "Update should be triggered only when relevant field information is changed, and only for patients existing in Business Central.  Patients with no financial transations should remain in TCM only.",
+        "operationId" : "patchPatient",
+        "parameters" : [ {
+          "name" : "company_id",
+          "in" : "path",
+          "description" : "id for company",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "patient_id",
+          "in" : "path",
+          "description" : "id for patient",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "application/json",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_1"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Patient has been successfully updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/patient"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies({company_id})/products" : {
+      "post" : {
+        "tags" : [ "product" ],
+        "summary" : "Creates a new product",
+        "operationId" : "postProduct",
+        "parameters" : [ {
+          "name" : "company_id",
+          "in" : "path",
+          "description" : "id for company",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "application/json",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_2"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "A new product has been successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/product"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies({company_id})/products({product_id})" : {
+      "patch" : {
+        "tags" : [ "product" ],
+        "summary" : "Updates product",
+        "operationId" : "patchProduct",
+        "parameters" : [ {
+          "name" : "company_id",
+          "in" : "path",
+          "description" : "id for company",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "product_id",
+          "in" : "path",
+          "description" : "id for product",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "application/json",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_3"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Patient has been successfully updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/patient"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies({company_id})/purchaseOrders" : {
+      "post" : {
+        "tags" : [ "purchaseOrder" ],
+        "summary" : "Creates a new purchaseOrder",
+        "operationId" : "postPurchaseOrder",
+        "parameters" : [ {
+          "name" : "company_id",
+          "in" : "path",
+          "description" : "id for company",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "application/json",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_4"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "A new purchase order has been successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/purchaseOrder"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies({company_id})/returnOrders" : {
+      "post" : {
+        "tags" : [ "returnOrder" ],
+        "summary" : "Creates a new returnOrder",
+        "operationId" : "postReturnOrder",
+        "parameters" : [ {
+          "name" : "company_id",
+          "in" : "path",
+          "description" : "id for company",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "application/json",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_5"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "A new return order has been successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/returnOrder"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies({company_id})/receipts" : {
+      "post" : {
+        "tags" : [ "receipt" ],
+        "summary" : "Creates a new receipt",
+        "operationId" : "postReceipt",
+        "parameters" : [ {
+          "name" : "company_id",
+          "in" : "path",
+          "description" : "id for company",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "application/json",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_6"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "A new return order has been successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/receipt"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies({company_id})/shipments" : {
+      "post" : {
+        "tags" : [ "shipment" ],
+        "summary" : "Creates a new shipment",
+        "operationId" : "postShipment",
+        "parameters" : [ {
+          "name" : "company_id",
+          "in" : "path",
+          "description" : "id for company",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "application/json",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_7"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "A new return order has been successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/receipt"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "patient" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "patientNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "patientName" : {
+            "maxLength" : 100,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "address" : {
+            "maxLength" : 100,
+            "type" : "string"
+          },
+          "address2" : {
+            "maxLength" : 50,
+            "type" : "string"
+          },
+          "city" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "stateProvince" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "country" : {
+            "maxLength" : 10,
+            "type" : "string"
+          },
+          "postCode" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "email" : {
+            "maxLength" : 80,
+            "type" : "string"
+          },
+          "taxLiable" : {
+            "type" : "boolean"
+          },
+          "taxRegistrationNumber" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "createdOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "lastModifiedDateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "product" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id property for the Business Central product entity.",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "sku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "The sku property for the TCM product entity.  Becomes the No. of the BC item entity."
+          },
+          "description" : {
+            "maxLength" : 100,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "productCategory" : {
+            "maxLength" : 10,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "Must match existing item category code in Business Central."
+          },
+          "manufacturer" : {
+            "maxLength" : 20,
+            "type" : "string",
+            "description" : "Must match existing vendor no. in Business Central."
+          },
+          "lastModifiedDateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "purchaseOrder" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id property for the Business Central purchaseOrder entity.",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "purchaseOrderNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "The id property for the TCM purchase order entity.  Becomes the No. of the BC purchase header entity."
+          },
+          "orderDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "vendorNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "Must match existing vendor no. in Business Central."
+          },
+          "clinicNo" : {
+            "maxLength" : 10,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "Must match existing location code in Business Central."
+          },
+          "createdOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "totalAmount" : {
+            "type" : "number"
+          },
+          "lineCount" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "returnOrder" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id property for the Business Central returnOrder entity.",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "returnOrderNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "The id property for the TCM return order entity.  Becomes the No. of the BC purchase header entity."
+          },
+          "returnDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "vendorNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "Must match existing vendor no. in Business Central."
+          },
+          "clinicNo" : {
+            "maxLength" : 10,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "Must match existing location code in Business Central."
+          },
+          "createdOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "totalAmount" : {
+            "type" : "number"
+          },
+          "lineCount" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "purchaseLine" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id property for the Business Central purchaseOrder entity.",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "lineNo" : {
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "productSku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "description" : {
+            "maxLength" : 100,
+            "type" : "string"
+          },
+          "quantity" : {
+            "minimum" : 1,
+            "type" : "number",
+            "description" : "Must be 1 for serialized items."
+          },
+          "unitCost" : {
+            "minimum" : 0,
+            "type" : "number"
+          }
+        }
+      },
+      "receipt" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id property for the Business Central receipt entity.",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "purchaseOrderNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "The id property for the TCM purchase order entity.  Must match existing document no. in Business Central"
+          },
+          "receiptDate" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "receiptLine" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id property for the Business Central receiptLine entity.",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "lineNo" : {
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "productSku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "quantityOrdered" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "quantityToReceive" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "serialNumber" : {
+            "type" : "string",
+            "description" : "Required if items is configured for serialized tracking"
+          },
+          "ReceivedOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "shipment" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id property for the Business Central shipment entity.",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "returnOrderNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "The id property for the TCM purchase order entity.  Must match existing document no. in Business Central"
+          },
+          "shipmentDate" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "shipmentLine" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id property for the Business Central receiptLine entity.",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "lineNo" : {
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "productSku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "quantityReturned" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "quantityToShip" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "serialNumber" : {
+            "type" : "string",
+            "description" : "Required if items is configured for serialized tracking"
+          },
+          "ShippedOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "body" : {
+        "required" : [ "lastModifiedDateTime", "patientName", "patientNo" ],
+        "properties" : {
+          "patientNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "Should be the unique patient no as defined by TCM.  Will become the customer no. in Business Central."
+          },
+          "patientName" : {
+            "maxLength" : 100,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "May not be blank."
+          },
+          "address" : {
+            "maxLength" : 100,
+            "type" : "string"
+          },
+          "address2" : {
+            "maxLength" : 50,
+            "type" : "string"
+          },
+          "city" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "stateProvince" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "country" : {
+            "maxLength" : 10,
+            "type" : "string",
+            "description" : "If ommitted, default to country code per company information in Business Central.  If included, value must match existing country codes in Business Central (ISO alpha 2 codes)."
+          },
+          "postCode" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "email" : {
+            "maxLength" : 80,
+            "type" : "string"
+          },
+          "taxLiable" : {
+            "type" : "boolean"
+          },
+          "taxRegistrationNumber" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "createdOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "body_1" : {
+        "required" : [ "lastModifiedDateTime" ],
+        "properties" : {
+          "patientNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "immutable",
+            "readOnly" : true
+          },
+          "patientName" : {
+            "maxLength" : 100,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "address" : {
+            "maxLength" : 100,
+            "type" : "string"
+          },
+          "address2" : {
+            "maxLength" : 50,
+            "type" : "string"
+          },
+          "city" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "stateProvince" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "country" : {
+            "maxLength" : 10,
+            "type" : "string"
+          },
+          "postCode" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "maxLength" : 30,
+            "type" : "string"
+          },
+          "email" : {
+            "maxLength" : 80,
+            "type" : "string"
+          },
+          "taxLiable" : {
+            "type" : "boolean"
+          },
+          "taxRegistrationNumber" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "lastModifiedDateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "body_2" : {
+        "required" : [ "description", "productCategory", "sku" ],
+        "properties" : {
+          "sku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "description" : {
+            "maxLength" : 100,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "productCategory" : {
+            "maxLength" : 10,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "manufacturer" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "lastModifiedDateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "body_3" : {
+        "required" : [ "lastModifiedDateTime" ],
+        "properties" : {
+          "sku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string",
+            "readOnly" : true
+          },
+          "description" : {
+            "maxLength" : 100,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "productCategory" : {
+            "maxLength" : 10,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "manufacturer" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "lastModifiedDateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "companiescompany_idpurchaseOrders_purchaseOrderLine" : {
+        "required" : [ "lineNo", "productSku", "quantity", "unitCost" ],
+        "type" : "object",
+        "properties" : {
+          "lineNo" : {
+            "type" : "integer"
+          },
+          "productSku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "description" : {
+            "maxLength" : 100,
+            "type" : "string"
+          },
+          "quantity" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "unitCost" : {
+            "minimum" : 0,
+            "type" : "number"
+          }
+        }
+      },
+      "body_4" : {
+        "required" : [ "clinicNo", "lastModifiedDateTime", "lineCount", "orderDate", "purchaseOrderNo", "totalAmount", "vendorNo" ],
+        "properties" : {
+          "purchaseOrderNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "orderDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "vendorNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "clinicNo" : {
+            "maxLength" : 10,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "createdOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "purchaseOrderLine" : {
+            "$ref" : "#/components/schemas/companiescompany_idpurchaseOrders_purchaseOrderLine"
+          },
+          "totalAmount" : {
+            "type" : "number"
+          },
+          "lineCount" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "body_5" : {
+        "required" : [ "clinicNo", "lastModifiedDateTime", "lineCount", "returnDate", "returnOrderNo", "totalAmount", "vendorNo" ],
+        "properties" : {
+          "returnOrderNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "returnDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "vendorNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "clinicNo" : {
+            "maxLength" : 10,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "createdOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "purchaseOrderLine" : {
+            "$ref" : "#/components/schemas/companiescompany_idpurchaseOrders_purchaseOrderLine"
+          },
+          "totalAmount" : {
+            "type" : "number"
+          },
+          "lineCount" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "companiescompany_idreceipts_receiptLine" : {
+        "required" : [ "ReceivedOn", "lineNo", "productSku", "quantityOrdered", "quantityToReceive" ],
+        "type" : "object",
+        "properties" : {
+          "productSku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "lineNo" : {
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "quantityOrdered" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "quantityToReceive" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "serialNumber" : {
+            "type" : "string"
+          },
+          "ReceivedOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "body_6" : {
+        "required" : [ "purchaseOrderNo", "receiptDate" ],
+        "properties" : {
+          "purchaseOrderNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "receiptDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "receiptLine" : {
+            "$ref" : "#/components/schemas/companiescompany_idreceipts_receiptLine"
+          }
+        }
+      },
+      "companiescompany_idshipments_shipmentLines" : {
+        "required" : [ "ShippedOn", "lineNo", "productSku", "quantityReturned", "quantityToShip" ],
+        "type" : "object",
+        "properties" : {
+          "productSku" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "lineNo" : {
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "quantityReturned" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "quantityToShip" : {
+            "minimum" : 1,
+            "type" : "number"
+          },
+          "serialNumber" : {
+            "type" : "string"
+          },
+          "ShippedOn" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "body_7" : {
+        "required" : [ "returnOrderNo", "shipmentDate" ],
+        "properties" : {
+          "returnOrderNo" : {
+            "maxLength" : 20,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "shipmentDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "shipmentLines" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/companiescompany_idshipments_shipmentLines"
+            }
+          }
+        }
+      }
+    },
+    "parameters" : {
+      "ContentTypeParam" : {
+        "name" : "Content-Type",
+        "in" : "header",
+        "description" : "application/json",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}
