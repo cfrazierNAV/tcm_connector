@@ -1,0 +1,867 @@
+openapi: '3.0.0'
+info:
+  version: 0.0.1
+  title: Dynamics 365 Business Central
+  description: WSA API's to integrate with TCM
+
+servers:
+  - url: https://api.businesscentral.dynamics.com/v2.0/{tenantId}/{instanceName}/api/wsa/tcm/beta
+    description: "AT/CH test instance"
+    variables:
+      tenantId:
+        default: 9865398f-6bb9-4f95-b2b8-84f34fd73d6f
+        description: AAD tenant ID
+      instanceName:
+        default: ch-sandbox
+        description: BC instance name
+
+paths:
+  "/companies({company_id})/patients":
+    parameters: 
+      - name: company_id
+        in: path
+        required: true
+        description: id for company
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Creates a new patient
+      description: New patients should be sent to Business Central only when a related financial transaction is 
+        triggered.  Patients with no financial transactions should remain in TCM only.
+      tags: 
+        - patient
+      operationId: postPatient
+      parameters: 
+        - $ref: '#/components/parameters/ContentTypeParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - patientNo
+                - patientName
+                - lastModifiedDateTime
+              properties:
+                patientNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                  description: Should be the unique patient no as defined by TCM.  Will become the customer no. in Business Central.
+                patientName:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  description: May not be blank.
+                address:
+                  type: string
+                  maxLength: 100
+                address2:
+                  type: string
+                  maxLength: 50
+                city:
+                  type: string
+                  maxLength: 30
+                stateProvince:
+                  type: string
+                  maxLength: 30
+                country:
+                  type: string
+                  maxLength: 10
+                  description: If ommitted, default to country code per company information in Business Central.  If 
+                    included, value must match existing country codes in Business Central (ISO alpha 2 codes).
+                postCode:
+                  type: string
+                  maxLength: 20
+                phoneNumber:
+                  type: string
+                  maxLength: 30
+                email:
+                  type: string
+                  maxLength: 80
+                taxLiable:
+                  type: boolean
+                taxRegistrationNumber:
+                  type: string
+                  maxLength: 20
+                createdOn:
+                  type: string
+                  format: date-time
+      responses:
+        201:
+          description: A new patient has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+
+  "/companies({company_id})/patients({patient_id})":
+    parameters: 
+      - name: company_id
+        in: path
+        required: true
+        description: id for company
+        schema:
+          type: string
+          format: uuid
+      - name: patient_id
+        in: path
+        required: true
+        description: id for patient
+        schema:
+          type: string
+          format: uuid
+    patch:
+      summary: Updates patient
+      description: Update should be triggered only when relevant field information is changed, and only for patients existing in Business Central.  Patients with no financial transations should remain in TCM only.
+      tags: 
+        - patient
+      operationId: patchPatient
+      parameters: 
+        - $ref: '#/components/parameters/ContentTypeParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - lastModifiedDateTime
+              properties:
+                patientNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                  readOnly: true
+                  description: immutable
+                patientName:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                address:
+                  type: string
+                  maxLength: 100
+                address2:
+                  type: string
+                  maxLength: 50
+                city:
+                  type: string
+                  maxLength: 30
+                stateProvince:
+                  type: string
+                  maxLength: 30
+                country:
+                  type: string
+                  maxLength: 10
+                postCode:
+                  type: string
+                  maxLength: 20
+                phoneNumber:
+                  type: string
+                  maxLength: 30
+                email:
+                  type: string
+                  maxLength: 80
+                taxLiable:
+                  type: boolean
+                taxRegistrationNumber:
+                  type: string
+                  maxLength: 20
+                lastModifiedDateTime:
+                  type: string
+                  format: date-time
+      responses:
+        201:
+          description: Patient has been successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+
+  "/companies({company_id})/products":
+    parameters: 
+      - name: company_id
+        in: path
+        required: true
+        description: id for company
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Creates a new product
+      tags: 
+        - product
+      operationId: postProduct
+      parameters: 
+        - $ref: '#/components/parameters/ContentTypeParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - sku
+                - description
+                - productCategory
+              properties:
+                sku:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                description:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                productCategory:
+                  type: string
+                  minLength: 1
+                  maxLength: 10
+                manufacturer:
+                  type: string
+                  maxLength: 20
+                lastModifiedDateTime:
+                  type: string
+                  format: date-time
+      responses:
+        201:
+          description: A new product has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+
+  "/companies({company_id})/products({product_id})":
+    parameters: 
+      - name: company_id
+        in: path
+        required: true
+        description: id for company
+        schema:
+          type: string
+          format: uuid
+      - name: product_id
+        in: path
+        required: true
+        description: id for product
+        schema:
+          type: string
+          format: uuid
+    patch:
+      summary: Updates product
+      tags: 
+        - product
+      operationId: patchProduct
+      parameters: 
+        - $ref: '#/components/parameters/ContentTypeParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - lastModifiedDateTime
+              properties:
+                sku:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                  readOnly: true
+                description:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                productCategory:
+                  type: string
+                  minLength: 1
+                  maxLength: 10
+                manufacturer:
+                  type: string
+                  maxLength: 20
+                lastModifiedDateTime:
+                  type: string
+                  format: date-time
+      responses:
+        201:
+          description: Patient has been successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+
+  "/companies({company_id})/purchaseOrders":
+    parameters: 
+      - name: company_id
+        in: path
+        required: true
+        description: id for company
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Creates a new purchaseOrder
+      tags: 
+        - purchaseOrder
+      operationId: postPurchaseOrder
+      parameters: 
+        - $ref: '#/components/parameters/ContentTypeParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - purchaseOrderNo
+                - orderDate
+                - vendorNo
+                - clinicNo
+                - lastModifiedDateTime
+                - totalAmount
+                - lineCount
+              properties:
+                purchaseOrderNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                orderDate:
+                  type: string
+                  format: date
+                vendorNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                clinicNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 10
+                createdOn:
+                  type: string
+                  format: date-time
+                purchaseOrderLine:
+                  type: object
+                  required:
+                    - lineNo
+                    - productSku
+                    - quantity
+                    - unitCost
+                  properties:
+                    lineNo:
+                      type: integer
+                    productSku:
+                      type: string
+                      minLength: 1
+                      maxLength: 20
+                    description:
+                      type: string
+                      maxLength: 100
+                    quantity:
+                      type: number
+                      minimum: 1
+                    unitCost:
+                      type: number
+                      minimum: 0
+                totalAmount:
+                  type: number
+                lineCount:
+                  type: integer
+      responses:
+        201:
+          description: A new purchase order has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/purchaseOrder'
+
+  "/companies({company_id})/returnOrders":
+    parameters: 
+      - name: company_id
+        in: path
+        required: true
+        description: id for company
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Creates a new returnOrder
+      tags: 
+        - returnOrder
+      operationId: postReturnOrder
+      parameters: 
+        - $ref: '#/components/parameters/ContentTypeParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - returnOrderNo
+                - returnDate
+                - vendorNo
+                - clinicNo
+                - lastModifiedDateTime
+                - totalAmount
+                - lineCount
+              properties:
+                returnOrderNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                returnDate:
+                  type: string
+                  format: date
+                vendorNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                clinicNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 10
+                createdOn:
+                  type: string
+                  format: date-time
+                purchaseOrderLine:
+                  type: object
+                  required:
+                    - lineNo
+                    - productSku
+                    - quantity
+                    - unitCost
+                  properties:
+                    lineNo:
+                      type: integer
+                    productSku:
+                      type: string
+                      minLength: 1
+                      maxLength: 20
+                    description:
+                      type: string
+                      maxLength: 100
+                    quantity:
+                      type: number
+                      minimum: 1
+                    unitCost:
+                      type: number
+                      minimum: 0
+                totalAmount:
+                  type: number
+                lineCount:
+                  type: integer
+      responses:
+        201:
+          description: A new return order has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/returnOrder'
+
+  "/companies({company_id})/receipts":
+    parameters: 
+      - name: company_id
+        in: path
+        required: true
+        description: id for company
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Creates a new receipt
+      tags: 
+        - receipt
+      operationId: postReceipt
+      parameters: 
+        - $ref: '#/components/parameters/ContentTypeParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - purchaseOrderNo
+                - receiptDate
+              properties:
+                purchaseOrderNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                receiptDate:
+                  type: string
+                  format: date
+                receiptLine:
+                  type: object
+                  required: 
+                    - productSku
+                    - lineNo
+                    - quantityOrdered
+                    - quantityToReceive
+                    - ReceivedOn
+                  properties:
+                    productSku:
+                      type: string
+                      minLength: 1
+                      maxLength: 20
+                    lineNo:
+                      type: integer
+                      minimum: 1
+                    quantityOrdered:
+                      type: number
+                      minimum: 1
+                    quantityToReceive:
+                      type: number
+                      minimum: 1
+                    serialNumber:
+                      type: string
+                    ReceivedOn:
+                      type: string
+                      format: date-time
+      responses:
+        201:
+          description: A new return order has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receipt'
+
+  "/companies({company_id})/shipments":
+    parameters: 
+      - name: company_id
+        in: path
+        required: true
+        description: id for company
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Creates a new shipment
+      tags: 
+        - shipment
+      operationId: postShipment
+      parameters: 
+        - $ref: '#/components/parameters/ContentTypeParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - returnOrderNo
+                - shipmentDate
+              properties:
+                returnOrderNo:
+                  type: string
+                  minLength: 1
+                  maxLength: 20
+                shipmentDate:
+                  type: string
+                  format: date
+                shipmentLines:
+                  type: array 
+                  items:
+                    type: object
+                    required: 
+                      - productSku
+                      - lineNo
+                      - quantityReturned
+                      - quantityToShip
+                      - ShippedOn
+                    properties:
+                      productSku:
+                        type: string
+                        minLength: 1
+                        maxLength: 20
+                      lineNo:
+                        type: integer
+                        minimum: 1
+                      quantityReturned:
+                        type: number
+                        minimum: 1
+                      quantityToShip:
+                        type: number
+                        minimum: 1
+                      serialNumber:
+                        type: string
+                      ShippedOn:
+                        type: string
+                        format: date-time
+      responses:
+        201:
+          description: A new return order has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receipt'
+
+components:
+  schemas:
+    patient:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        patientNo:
+          type: string
+          minLength: 1
+          maxLength: 20
+        patientName:
+          type: string
+          minLength: 1
+          maxLength: 100
+        address:
+          type: string
+          maxLength: 100
+        address2:
+          type: string
+          maxLength: 50
+        city:
+          type: string
+          maxLength: 30
+        stateProvince:
+          type: string
+          maxLength: 30
+        country:
+          type: string
+          maxLength: 10
+        postCode:
+          type: string
+          maxLength: 20
+        phoneNumber:
+          type: string
+          maxLength: 30
+        email:
+          type: string
+          maxLength: 80
+        taxLiable:
+          type: boolean
+        taxRegistrationNumber:
+          type: string
+          maxLength: 20
+        createdOn:
+          type: string
+          format: date-time
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+
+    product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The id property for the Business Central product entity.
+        sku:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: The sku property for the TCM product entity.  Becomes the No. of the BC item entity.
+        description:
+          type: string
+          minLength: 1
+          maxLength: 100
+        productCategory:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: Must match existing item category code in Business Central.
+        manufacturer:
+          type: string
+          maxLength: 20
+          description: Must match existing vendor no. in Business Central.
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+
+    purchaseOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The id property for the Business Central purchaseOrder entity.
+        purchaseOrderNo:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: The id property for the TCM purchase order entity.  Becomes the No. of the BC purchase header entity.
+        orderDate:
+          type: string
+          format: date
+        vendorNo:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: Must match existing vendor no. in Business Central.
+        clinicNo:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: Must match existing location code in Business Central.
+        createdOn:
+          type: string
+          format: date-time
+        totalAmount:
+          type: number
+        lineCount:
+          type: integer
+
+    returnOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The id property for the Business Central returnOrder entity.
+        returnOrderNo:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: The id property for the TCM return order entity.  Becomes the No. of the BC purchase header entity.
+        returnDate:
+          type: string
+          format: date
+        vendorNo:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: Must match existing vendor no. in Business Central.
+        clinicNo:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: Must match existing location code in Business Central.
+        createdOn:
+          type: string
+          format: date-time
+        totalAmount:
+          type: number
+        lineCount:
+          type: integer
+
+    purchaseLine:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The id property for the Business Central purchaseOrder entity.
+        lineNo:
+          type: integer
+          minimum: 1
+        productSku:
+          type: string
+          minLength: 1
+          maxLength: 20
+        description:
+          type: string
+          maxLength: 100
+        quantity:
+          type: number
+          minimum: 1
+          description: Must be 1 for serialized items.
+        unitCost:
+          type: number
+          minimum: 0
+
+    receipt:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The id property for the Business Central receipt entity.
+        purchaseOrderNo:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: The id property for the TCM purchase order entity.  Must match existing document no. in Business Central
+        receiptDate:
+          type: string
+          format: date
+
+    receiptLine:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The id property for the Business Central receiptLine entity.
+        lineNo:
+          type: integer
+          minimum: 1
+        productSku:
+          type: string
+          minLength: 1
+          maxLength: 20
+        quantityOrdered:
+          type: number
+          minimum: 1
+        quantityToReceive:
+          type: number
+          minimum: 1
+        serialNumber:
+          type: string
+          description: Required if items is configured for serialized tracking
+        ReceivedOn:
+          type: string
+          format: date-time
+
+    shipment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The id property for the Business Central shipment entity.
+        returnOrderNo:
+          type: string
+          minLength: 1
+          maxLength: 20
+          description: The id property for the TCM purchase order entity.  Must match existing document no. in Business Central
+        shipmentDate:
+          type: string
+          format: date
+
+    shipmentLine:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The id property for the Business Central receiptLine entity.
+        lineNo:
+          type: integer
+          minimum: 1
+        productSku:
+          type: string
+          minLength: 1
+          maxLength: 20
+        quantityReturned:
+          type: number
+          minimum: 1
+        quantityToShip:
+          type: number
+          minimum: 1
+        serialNumber:
+          type: string
+          description: Required if items is configured for serialized tracking
+        ShippedOn:
+          type: string
+          format: date-time
+
+  parameters:
+    ContentTypeParam:
+      name: Content-Type
+      in: header
+      schema:
+        type: string
+      required: true
+      description: application/json
